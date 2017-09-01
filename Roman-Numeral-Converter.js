@@ -2,30 +2,38 @@
 // All roman numerals answers should be provided in upper-case.
 
 
-var table = {
-       "1": "I",
-       "5": "V",
-      "10": "X",
-      "50": "L",
-     "100": "C",
-     "500": "D",
-    "1000": "M"
-}
-
 //lookup table corresponds to the decimal place being worked on. e.g. index 0 is single digits, index 1 is double digits, ...
 //match the decimal place with the conversion table to convert roman numerals
 
 
+/*
+Roman Numerals Reference Table
+    1 = I
+    5 = V
+   10 = X
+   50 = L
+  100 = C
+  500 = D
+ 1000 = M
+
+*/
+
+
 //workout how to do 1-5 10-50 100-500 first, then figure out the rest
 
-var romanLookup = [["I","V"],["X","L"],["C","D"],["M"]];
+var romanLookup = [
+    ["I", "V"],
+    ["X", "L"],
+    ["C", "D"],
+    ["M"]
+];
 
 
 function convertToRoman(num) {
     var arabic = [];
 
     var resutl = [];
-    
+
 
     // break up the arabic number into its decimal places
     arabic = num.toString().split("");
@@ -38,7 +46,8 @@ function convertToRoman(num) {
     //return the array the right way around
     result.reverse();
 
-    console.log(result.join());
+
+    console.log(result.join(""));
 
     // start processing the arabic number from the least significant digit. start with the right most 
 
@@ -52,27 +61,42 @@ function convertToRoman(num) {
 
 function convert(num, decimalPlace) {
     var arabic = [];
-    
+
 
     // break up the arabic number into its decimal places
     arabic = num.toString().split("");
-    
-            var roman = [];
-    
-            if (arabic[arabic.length - 1] > 0 && arabic[arabic.length - 1] < 4) {
-                for (i = 0; i < arabic[0]; i++) {
-                    roman.push(romanLookup[decimalPlace][0]);
-                }
-    
-            } else if (arabic[arabic.length - 1] == 4) {
-                roman.push(romanLookup[decimalPlace][0], romanLookup[decimalPlace][1]);
-    
-            } else if (arabic[arabic.length - 1] == 5) {
-                roman.push(romanLookup[decimalPlace][1]);
-            }
-    
-            return roman;
+
+    var roman = [];
+
+    //process numbers 1-3
+    if (arabic[arabic.length - 1] > 0 && arabic[arabic.length - 1] < 4) {
+        for (i = 0; i < arabic[0]; i++) {
+            roman.push(romanLookup[decimalPlace][0]);
         }
+
+        //process number 4
+    } else if (arabic[arabic.length - 1] == 4) {
+        roman.push(romanLookup[decimalPlace][0], romanLookup[decimalPlace][1]);
+
+
+        //process number 5
+    } else if (arabic[arabic.length - 1] == 5) {
+        roman.push(romanLookup[decimalPlace][1]);
+
+        //process numbers 6-8
+    } else if (arabic[arabic.length - 1] > 5 && arabic[arabic.length - 1] < 9) {
+        roman.push(romanLookup[decimalPlace][1]);
+        for (i = 0; i < arabic[0] - 5; i++) {
+            roman.push(romanLookup[decimalPlace][0]);
+        }
+
+        //process number 9
+    } else if (arabic[arabic.length - 1] == 9) {
+        roman.push(romanLookup[decimalPlace][0], romanLookup[decimalPlace + 1][0]);
+    }
+
+    return roman.join("");
+}
 
 convertToRoman(1);
 convertToRoman(2);
@@ -87,11 +111,16 @@ convertToRoman(10);
 convertToRoman(12);
 convertToRoman(20);
 convertToRoman(22);
+convertToRoman(91);
 convertToRoman(123);
 
 convertToRoman(505);
+convertToRoman(905);
 convertToRoman(1009);
 convertToRoman(3500);
+
+convertToRoman(798);
+convertToRoman(3999);
 
 // console.log(convertToRoman(2)); //should return "II".
 // console.log(convertToRoman(3)); // should return "III".
