@@ -23,45 +23,56 @@ var romanLookup = [["I","V"],["X","L"],["C","D"],["M"]];
 
 function convertToRoman(num) {
     var arabic = [];
-    var roman = [];
+
+    var resutl = [];
+    
 
     // break up the arabic number into its decimal places
     arabic = num.toString().split("");
 
-    // console.log(arabic.filter(function (element, index) {
-    //     return element < 4;
-    // }));
+    // we need to reverse the array as map's index will start at the most significant digit and we need to process the least significant digit
+    result = (arabic.reverse().map(function (element, index) {
+        return convert(element, index);
+    }));
+
+    //return the array the right way around
+    result.reverse();
+
+    console.log(result.join());
 
     // start processing the arabic number from the least significant digit. start with the right most 
 
     //roman one's  , eg. I, X, C, M
     //roman fives  , eg. V, L, D
 
-
     //depending on what decimal place is being worked on, the following function can be passed the correct power roman letter.
-
-    // function convert() {
-        if (arabic[arabic.length - 1] > 0 && arabic[arabic.length - 1] < 4) {
-            for (i = 0; i < arabic[0]; i++) {
-                roman.push("I");
-            }
-
-        } else if (arabic[arabic.length - 1] == 4) {
-            roman.push("IV");
-
-        } else if (arabic[arabic.length - 1] == 5) {
-            roman.push("V");
-        }
-    // }
-
-
-    //setup some conversion rules based on the number's decimal place
-
-    console.log(roman);
-
 
     return;
 }
+
+function convert(num, decimalPlace) {
+    var arabic = [];
+    
+
+    // break up the arabic number into its decimal places
+    arabic = num.toString().split("");
+    
+            var roman = [];
+    
+            if (arabic[arabic.length - 1] > 0 && arabic[arabic.length - 1] < 4) {
+                for (i = 0; i < arabic[0]; i++) {
+                    roman.push(romanLookup[decimalPlace][0]);
+                }
+    
+            } else if (arabic[arabic.length - 1] == 4) {
+                roman.push(romanLookup[decimalPlace][0], romanLookup[decimalPlace][1]);
+    
+            } else if (arabic[arabic.length - 1] == 5) {
+                roman.push(romanLookup[decimalPlace][1]);
+            }
+    
+            return roman;
+        }
 
 convertToRoman(1);
 convertToRoman(2);
@@ -73,9 +84,14 @@ convertToRoman(7);
 convertToRoman(8);
 convertToRoman(9);
 convertToRoman(10);
-// convertToRoman(12);
-// convertToRoman(505);
-// convertToRoman(1009);
+convertToRoman(12);
+convertToRoman(20);
+convertToRoman(22);
+convertToRoman(123);
+
+convertToRoman(505);
+convertToRoman(1009);
+convertToRoman(3500);
 
 // console.log(convertToRoman(2)); //should return "II".
 // console.log(convertToRoman(3)); // should return "III".
