@@ -1,11 +1,6 @@
 // Convert the given number into a roman numeral.
 // All roman numerals answers should be provided in upper-case.
 
-
-//lookup table corresponds to the decimal place being worked on. e.g. index 0 is single digits, index 1 is double digits, ...
-//match the decimal place with the conversion table to convert roman numerals
-
-
 /*
 Roman Numerals Reference Table
     1 = I
@@ -16,10 +11,11 @@ Roman Numerals Reference Table
   500 = D
  1000 = M
 
+The romanLookup table is used to convert arabic numbers by lining up the array's index to the arabic number's decimal place; then converting each number in turn based on coversion rules. Because of the way roman numberals work, the number 9 uses the next index of the array.
+
+e.g. index 0 corresponds to 1-8, index 1 corresponds to 9-89, index 2 corresponds to 90 - 899 ...
+
 */
-
-
-//workout how to do 1-5 10-50 100-500 first, then figure out the rest
 
 var romanLookup = [
     ["I", "V"],
@@ -28,122 +24,75 @@ var romanLookup = [
     ["M"]
 ];
 
-
 function convertToRoman(num) {
-    var arabic = [];
-
-    var resutl = [];
-
+    var result = [];
 
     // break up the arabic number into its decimal places
-    arabic = num.toString().split("");
+    num = num.toString().split("");
 
-    // we need to reverse the array as map's index will start at the most significant digit and we need to process the least significant digit
-    result = (arabic.reverse().map(function (element, index) {
+    // we need to reverse the array as map's index will start at the most significant digit and we need to process the least significant digit first
+    result = (num.reverse().map(function (element, index) {
         return convert(element, index);
     }));
 
-    //return the array the right way around
-    result.reverse();
-
-
-    console.log(result.join(""));
-
-    // start processing the arabic number from the least significant digit. start with the right most 
-
-    //roman one's  , eg. I, X, C, M
-    //roman fives  , eg. V, L, D
-
-    //depending on what decimal place is being worked on, the following function can be passed the correct power roman letter.
-
-    return;
+    //now that we've processed it, place the array the right way around
+    return result.reverse().join("");
 }
 
-function convert(num, decimalPlace) {
-    var arabic = [];
-
-
-    // break up the arabic number into its decimal places
-    arabic = num.toString().split("");
-
+function convert(number, decimalPlace) {
     var roman = [];
 
     //process numbers 1-3
-    if (arabic[arabic.length - 1] > 0 && arabic[arabic.length - 1] < 4) {
-        for (i = 0; i < arabic[0]; i++) {
+    if (number > 0 && number < 4) {
+        for (i = 0; i < number; i++) {
             roman.push(romanLookup[decimalPlace][0]);
         }
 
-        //process number 4
-    } else if (arabic[arabic.length - 1] == 4) {
+        //  process number 4
+    } else if (number == 4) {
         roman.push(romanLookup[decimalPlace][0], romanLookup[decimalPlace][1]);
 
-
-        //process number 5
-    } else if (arabic[arabic.length - 1] == 5) {
+        //  process number 5
+    } else if (number == 5) {
         roman.push(romanLookup[decimalPlace][1]);
 
-        //process numbers 6-8
-    } else if (arabic[arabic.length - 1] > 5 && arabic[arabic.length - 1] < 9) {
+        // process numbers 6-8
+    } else if (number > 5 && number < 9) {
         roman.push(romanLookup[decimalPlace][1]);
-        for (i = 0; i < arabic[0] - 5; i++) {
+        for (i = 0; i < number - 5; i++) {
             roman.push(romanLookup[decimalPlace][0]);
         }
 
-        //process number 9
-    } else if (arabic[arabic.length - 1] == 9) {
+        // process number 9
+    } else if (number == 9) {
         roman.push(romanLookup[decimalPlace][0], romanLookup[decimalPlace + 1][0]);
     }
 
     return roman.join("");
 }
 
-convertToRoman(1);
-convertToRoman(2);
-convertToRoman(3);
-convertToRoman(4);
-convertToRoman(5);
-convertToRoman(6);
-convertToRoman(7);
-convertToRoman(8);
-convertToRoman(9);
-convertToRoman(10);
-convertToRoman(12);
-convertToRoman(20);
-convertToRoman(22);
-convertToRoman(91);
-convertToRoman(123);
-
-convertToRoman(505);
-convertToRoman(905);
-convertToRoman(1009);
-convertToRoman(3500);
-
-convertToRoman(798);
-convertToRoman(3999);
-
-// console.log(convertToRoman(2)); //should return "II".
-// console.log(convertToRoman(3)); // should return "III".
-// console.log(convertToRoman(4)); // should return "IV".
-// console.log(convertToRoman(5)); // should return "V".
-// console.log(convertToRoman(9)); // should return "IX".
-// console.log(convertToRoman(12)); // should return "XII".
-// console.log(convertToRoman(16)); // should return "XVI".
-// console.log(convertToRoman(29)); // should return "XXIX".
-// console.log(convertToRoman(44)); // should return "XLIV".
-// console.log(convertToRoman(45)); // should return "XLV"
-// console.log(convertToRoman(68)); // should return "LXVIII"
-// console.log(convertToRoman(83)); // should return "LXXXIII"
-// console.log(convertToRoman(97)); // should return "XCVII"
-// console.log(convertToRoman(99)); // should return "XCIX"
-// console.log(convertToRoman(500)); // should return "D"
-// console.log(convertToRoman(501)); // should return "DI"
-// console.log(convertToRoman(649)); // should return "DCXLIX"
-// console.log(convertToRoman(798)); // should return "DCCXCVIII"
-// console.log(convertToRoman(891)); // should return "DCCCXCI"
-// console.log(convertToRoman(1000)); // should return "M"
-// console.log(convertToRoman(1004)); // should return "MIV"
-// console.log(convertToRoman(1006)); // should return "MVI"
-// console.log(convertToRoman(1023)); // should return "MXXIII"
-// console.log(convertToRoman(2014)); // should return "MMXIV"
-// console.log(convertToRoman(3999)); // should return "MMMCMXCIX"
+console.log(convertToRoman(2)); //should return "II".
+console.log(convertToRoman(3)); // should return "III".
+console.log(convertToRoman(4)); // should return "IV".
+console.log(convertToRoman(5)); // should return "V".
+console.log(convertToRoman(9)); // should return "IX".
+console.log(convertToRoman(12)); // should return "XII".
+console.log(convertToRoman(16)); // should return "XVI".
+console.log(convertToRoman(29)); // should return "XXIX".
+console.log(convertToRoman(44)); // should return "XLIV".
+console.log(convertToRoman(45)); // should return "XLV"
+console.log(convertToRoman(68)); // should return "LXVIII"
+console.log(convertToRoman(83)); // should return "LXXXIII"
+console.log(convertToRoman(97)); // should return "XCVII"
+console.log(convertToRoman(99)); // should return "XCIX"
+console.log(convertToRoman(500)); // should return "D"
+console.log(convertToRoman(501)); // should return "DI"
+console.log(convertToRoman(649)); // should return "DCXLIX"
+console.log(convertToRoman(798)); // should return "DCCXCVIII"
+console.log(convertToRoman(891)); // should return "DCCCXCI"
+console.log(convertToRoman(1000)); // should return "M"
+console.log(convertToRoman(1004)); // should return "MIV"
+console.log(convertToRoman(1006)); // should return "MVI"
+console.log(convertToRoman(1023)); // should return "MXXIII"
+console.log(convertToRoman(2014)); // should return "MMXIV"
+console.log(convertToRoman(3999)); // should return "MMMCMXCIX"
